@@ -21,7 +21,10 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors({ origin: '*' }));
+app.use(cors({
+  origin: 'https://grainledger-g1fq.onrender.com',
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
