@@ -12,14 +12,14 @@ router.use(protect);
 // @access  Private
 router.get('/next-number', async (req, res) => {
   try {
-    const currentYear = new Date().getFullYear();
-    
+    const currentYear = 2026;
+    const nextYear = 27;
     // Find the highest sequence number for current year
     const lastTransaction = await Transaction.findOne({ year: currentYear })
       .sort({ sequenceNumber: -1 });
     
     const nextSequence = lastTransaction ? lastTransaction.sequenceNumber + 1 : 1;
-    const transactionNumber = `Tr${currentYear}-${nextSequence}`;
+    const transactionNumber = `${currentYear}-${nextYear}-${nextSequence}`;
     
     res.json({ 
       success: true, 
@@ -169,14 +169,14 @@ router.get('/:id', async (req, res) => {
 // @access  Private
 router.post('/', async (req, res) => {
   try {
-    const currentYear = new Date().getFullYear();
-    
-    // Get next sequence number
+    const currentYear = 2026;
+    const nextYear = 27;
+    // Find the highest sequence number for current year
     const lastTransaction = await Transaction.findOne({ year: currentYear })
       .sort({ sequenceNumber: -1 });
     
     const sequenceNumber = lastTransaction ? lastTransaction.sequenceNumber + 1 : 1;
-    const transactionNumber = `Tr${currentYear}-${sequenceNumber}`;
+    const transactionNumber = `${currentYear}-${nextYear}-${sequenceNumber}`;
     
     // Create transaction with auto-generated number
     const transactionData = {

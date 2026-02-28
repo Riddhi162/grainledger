@@ -5,9 +5,6 @@ import Navbar from '../components/Navbar';
 import TransactionTile from '../components/transactions/TransactionTile';
 import api from '../utils/api';
 
-// Place this file at: client/src/pages/DailyTransactions.jsx
-
-// ─── Print Styles ─────────────────────────────────────────────────────────────
 const PrintStyle = () => (
   <style>{`
     @media print {
@@ -25,59 +22,42 @@ const PrintStyle = () => (
   `}</style>
 );
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
 const DailyTransactions = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [transactions, setTransactions]   = useState([]);
-  const [loading, setLoading]             = useState(false);
-  const [error, setError]                 = useState('');
-  const [isFiltered, setIsFiltered]       = useState(false);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading]           = useState(false);
+  const [error, setError]               = useState('');
+  const [isFiltered, setIsFiltered]     = useState(false);
 
-  useEffect(() => {
-    fetchAll();
-  }, []);
+  useEffect(() => { fetchAll(); }, []);
 
-  // ── Fetch all ──────────────────────────────────────────────────────────────
   const fetchAll = async () => {
-    setLoading(true);
-    setError('');
-    setIsFiltered(false);
+    setLoading(true); setError(''); setIsFiltered(false);
     try {
       const response = await api.get('/transactions');
       setTransactions(response.data.data);
-    } catch {
-      setError('Failed to fetch transactions');
-    }
+    } catch { setError('Failed to fetch transactions'); }
     setLoading(false);
   };
 
-  // ── Fetch by date ──────────────────────────────────────────────────────────
   const fetchByDate = async () => {
-    setLoading(true);
-    setError('');
-    setIsFiltered(true);
+    setLoading(true); setError(''); setIsFiltered(true);
     try {
       const response = await api.get(`/transactions/daily/${selectedDate}`);
       setTransactions(response.data.data);
-    } catch {
-      setError('Failed to fetch transactions');
-    }
+    } catch { setError('Failed to fetch transactions'); }
     setLoading(false);
   };
 
-  // ── Edit ───────────────────────────────────────────────────────────────────
-  const handleEdit = (txn) => {
-    navigate('/transactions/add', { state: { editTransaction: txn } });
-  };
+  const handleEdit = (txn) => navigate('/transactions/add', { state: { editTransaction: txn } });
 
-  // ── Delete ──────────────────────────────────────────────────────────────────
-  // Uses the DELETE /api/transactions/:id route from your route.js
   const handleDelete = async (id) => {
     await api.delete(`/transactions/${id}`);
-    // Remove from local state so UI updates instantly — no need to refetch
     setTransactions((prev) => prev.filter((t) => t._id !== id));
   };
+
+  
 
   return (
     <>
@@ -87,7 +67,7 @@ const DailyTransactions = () => {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-          {/* ── Header ──────────────────────────────────────────────────── */}
+          {/* ── Header ── */}
           <div className="flex items-start justify-between mb-6">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Daily Transactions</h1>
@@ -97,21 +77,24 @@ const DailyTransactions = () => {
                   : `All transactions — ${transactions.length} total`}
               </p>
             </div>
-            {isFiltered && (
-              <button onClick={fetchAll} className="text-sm text-blue-600 hover:underline mt-1">
-                ← Show All
-              </button>
-            )}
+            <div className="flex gap-2 items-start">
+              {isFiltered && (
+                <button onClick={fetchAll} className="text-sm text-blue-600 hover:underline mt-1">
+                  ← Show All
+                </button>
+              )}
+             
+            </div>
           </div>
 
-          {/* ── Error banner ─────────────────────────────────────────────── */}
+          {/* ── Error banner ── */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
               {error}
             </div>
           )}
 
-          {/* ── Filter bar ───────────────────────────────────────────────── */}
+          {/* ── Filter bar ── */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm px-5 py-4 mb-5 flex flex-wrap gap-3 items-end print:hidden">
             <div className="flex-1 min-w-[160px]">
               <label className="block text-xs font-medium text-gray-600 mb-1">Filter by Date</label>
@@ -122,21 +105,15 @@ const DailyTransactions = () => {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button
-              onClick={fetchByDate}
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition"
-            >
+            <button onClick={fetchByDate} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
               View Transactions
             </button>
-            <button
-              onClick={fetchAll}
-              className="px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition"
-            >
+            <button onClick={fetchAll} className="px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition">
               Reset
             </button>
           </div>
 
-          {/* ── Transaction list ─────────────────────────────────────────── */}
+          {/* ── Transaction list ── */}
           {loading ? (
             <div className="flex justify-center items-center h-64">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600" />
@@ -144,15 +121,8 @@ const DailyTransactions = () => {
           ) : transactions.length > 0 ? (
             <div className="space-y-3">
               {transactions.map((txn) => (
-                <TransactionTile
-                  key={txn._id}
-                  txn={txn}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}   // ← new prop
-                />
+                <TransactionTile key={txn._id} txn={txn} onEdit={handleEdit} onDelete={handleDelete} />
               ))}
-
-              {/* Grand total footer */}
               <div className="bg-white border border-gray-200 rounded-xl px-5 py-4 flex justify-between items-center">
                 <span className="text-sm text-gray-500">
                   {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}

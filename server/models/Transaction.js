@@ -9,7 +9,7 @@ const transactionSchema = new mongoose.Schema({
   },
   year: {
     type: Number,
-    required: true
+    
   },
   sequenceNumber: {
     type: Number,

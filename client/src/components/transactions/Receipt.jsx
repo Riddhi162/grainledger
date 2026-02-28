@@ -1,30 +1,14 @@
 import { format } from 'date-fns';
+import signatureImg from '../../assets/signature.png';
 
-// ─── Receipt Component ────────────────────────────────────────────────────────
-// Place this file at: client/src/components/transactions/Receipt.jsx
-// Signature image: place at client/src/assets/signature.png
 
-let signatureImg = null;
-try {
-  signatureImg = new URL('../assets/signature.png', import.meta.url).href;
-} catch (_) {
-  signatureImg = null;
-}
-
-const SignatureBlock = () => {
-  if (signatureImg) {
-    return (
-      <img
-        src={signatureImg}
-        alt="Authorised Signatory"
-        style={{ height: '56px', maxWidth: '160px', objectFit: 'contain', display: 'block', margin: '0 auto 4px' }}
-        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-      />
-    );
-  }
-  // Fallback: blank line
-  return <div style={{ height: '56px' }} />;
-};
+const SignatureBlock = () => (
+  <img
+    src={signatureImg}
+    alt="Authorised Signatory"
+    style={{ height: '60px', maxWidth: '200px', objectFit: 'contain', display: 'block', margin: '0 auto 0px' }}
+  />
+);
 
 const Receipt = ({ txn }) => (
   <div
@@ -48,10 +32,10 @@ const Receipt = ({ txn }) => (
       </div>
       <div style={{ fontSize: '15px', fontWeight: '600', color: '#333', marginBottom: '4px' }}>GRAIN BROKER</div>
       <div style={{ fontSize: '13px', color: '#1a56db', marginBottom: '2px' }}>
-        37, RD Dalal, Hathikhana, Fatehpura, Vadodara
+        A- 37, RD Dalal, Hathikhana, Fatehpura, Vadodara.
       </div>
       <div style={{ fontSize: '13px', color: '#1a56db' }}>
-        Phone: (O) 9979878246 &nbsp;&nbsp; 9879035642
+        Mobile No: 9979878246 &nbsp;&nbsp; 9879035642
       </div>
     </div>
 
@@ -70,52 +54,77 @@ const Receipt = ({ txn }) => (
     </p>
 
     {/* ── Parties ── */}
-    <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
-      <span><strong>Purchaser :</strong>&nbsp; {txn.purchaserName?.name}</span>
-      <span><strong>Purchaser City :</strong>&nbsp; {txn.purchaserCity?.name}</span>
-    </div>
-    <div style={{ marginBottom: '22px', display: 'flex', justifyContent: 'space-between' }}>
-      <span><strong>Seller &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :</strong>&nbsp; {txn.buyerName?.name}</span>
-      <span><strong>Seller City :</strong>&nbsp; {txn.buyerCity?.name}</span>
+    <div style={{ marginBottom: '22px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', flex: 1 }}>
+          <span style={{ minWidth: '90px', padding: '2px' }}><strong>Purchaser</strong></span>
+          <span><strong>:</strong>&nbsp; {txn.purchaserName?.name}</span>
+        </div>
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+          <span style={{ minWidth: '130px', textAlign: 'right' }}><strong>Purchaser City</strong></span>
+          <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.purchaserCity?.name}</span>
+        </div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', flex: 1 }}>
+          <span style={{ minWidth: '90px' }}><strong>Seller</strong></span>
+          <span><strong>:</strong>&nbsp; {txn.buyerName?.name}</span>
+        </div>
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+          <span style={{ minWidth: '130px', textAlign: 'right' }}><strong>Seller City</strong></span>
+          <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.buyerCity?.name}</span>
+        </div>
+      </div>
     </div>
 
     <hr style={{ borderStyle: 'dashed', borderColor: '#999', margin: '0 0 18px' }} />
 
     {/* ── Goods ── */}
     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-      <span><strong>Name of Goods :</strong>&nbsp; {txn.itemName?.name}</span>
-      <span><strong>Weight :</strong>&nbsp; {txn.dalaliKattaWeight}</span>
+      <div style={{ display: 'flex', flex: 1 }}>
+        <span style={{ minWidth: '130px' }}><strong>Name of Goods</strong></span>
+        <span><strong>:</strong>&nbsp; {txn.itemName?.name}</span>
+      </div>
+      <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+        <span style={{ minWidth: '100px', textAlign: 'right' }}><strong>Weight</strong></span>
+        <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.dalaliKattaWeight}</span>
+      </div>
     </div>
-    <div style={{ marginBottom: '10px' }}>
-      <strong>Bags / Katta :</strong>&nbsp; {txn.quantity} {txn.unit}
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <strong>Rate :</strong>&nbsp;
-      {Number(txn.ratePerUnit).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+      <div style={{ display: 'flex', flex: 1 }}>
+        <span style={{ minWidth: '130px' }}><strong>Bags / Katta</strong></span>
+        <span><strong>:</strong>&nbsp; {txn.quantity} {txn.unit}</span>
+      </div>
+      <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+        <span style={{ minWidth: '100px', textAlign: 'right' }}><strong>Rate</strong></span>
+        <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {Number(txn.ratePerUnit).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+      </div>
     </div>
-    <div style={{ marginBottom: '10px' }}>
-      <strong>Trade Method :</strong>&nbsp;
-      <span style={{ textTransform: 'capitalize' }}>{txn.tradeMethod}</span>
+    <div style={{ marginBottom: '10px', display: 'flex' }}>
+      <span style={{ minWidth: '130px' }}><strong>Trade Method</strong></span>
+      <span><strong>:</strong>&nbsp; <span style={{ textTransform: 'capitalize' }}>{txn.tradeMethod}</span></span>
     </div>
 
     {txn.tradeConditions && (
-      <div style={{ marginBottom: '10px' }}>
-        <strong>Condition :</strong>&nbsp; {txn.tradeConditions}
+      <div style={{ marginBottom: '10px', display: 'flex' }}>
+        <span style={{ minWidth: '130px' }}><strong>Condition</strong></span>
+        <span><strong>:</strong>&nbsp; {txn.tradeConditions}</span>
       </div>
     )}
 
     <hr style={{ borderStyle: 'dashed', borderColor: '#999', margin: '18px 0' }} />
 
     {/* ── Terms ── */}
-    <div style={{ fontSize: '12px', color: '#c00', lineHeight: '1.8', marginBottom: '28px' }}>
-      <p style={{ fontWeight: 'bold', marginBottom: '6px' }}>TERMS :</p>
+    <div style={{ fontSize: '14px', color: '#c00', lineHeight: '2', marginBottom: '50px' }}>
+      <p style={{ fontWeight: 'bold', marginBottom: '10px', fontSize: '15px' }}>TERMS :</p>
       <p>1) In every contract we are only witness.</p>
       <p>2) Subject to Vadodara Jurisdiction only.</p>
       <p>3) Both parties are full responsible for Losses, quality, Bags etc. in every contract.</p>
     </div>
 
     {/* ── Signature ── */}
-    <div style={{ textAlign: 'left', fontSize: '14px', fontWeight: '600', color: '#c00' }}>
-      <p style={{ marginBottom: '12px' }}>For GIRIRAJ HASMUKHLAL THAKKAR</p>
+    <div style={{ textAlign: 'right', fontSize: '14px', fontWeight: '600', color: '#c00' }}>
+     
       <div style={{ display: 'inline-block', textAlign: 'center' }}>
         <SignatureBlock />
         <div style={{ borderTop: '1px solid #999', paddingTop: '6px', fontSize: '12px', color: '#888' }}>
