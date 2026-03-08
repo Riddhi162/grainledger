@@ -306,6 +306,7 @@ const AddTransaction = () => {
                   >
                     <option value="20kg">20 kg</option>
                     <option value="50kg">50 kg</option>
+                    <option value="70kg">70 kg</option>
                     <option value="100kg">100 kg</option>
                   </select>
                 </div>
