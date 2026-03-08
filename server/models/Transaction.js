@@ -66,7 +66,7 @@ const transactionSchema = new mongoose.Schema({
   },
   dalaliKattaWeight: {
     type: String,
-    enum: ['20kg', '50kg', '100kg'],
+    enum: ['20kg', '50kg','70kg','100kg'],
     required: [true, 'Dalali katta weight is required']
   },
   totalAmount: {
