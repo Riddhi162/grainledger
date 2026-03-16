@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import api from '../utils/api';
 import { format } from 'date-fns';
+import SearchableSelect from '../components/SearchableSelect';
+
 const AddTransaction = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,8 +24,8 @@ const AddTransaction = () => {
   const [formData, setFormData] = useState({
     purchaserName: '',
     purchaserCity: '',
-    buyerName: '',
-    buyerCity: '',
+    sellerName: '',
+    sellerCity: '',
     itemName: '',
     quantity: '',
     unit: 'bag',
@@ -32,6 +34,7 @@ const AddTransaction = () => {
     dalaliRatePerKatta: '3',
     dalaliKattaWeight: '20kg',
     tradeConditions: '',
+    paymentConditions: '',
     tradeMethod: 'phone',
     date: format(new Date(), 'yyyy-MM-dd')
   });
@@ -48,22 +51,23 @@ const AddTransaction = () => {
     if (isEditMode && clients.length && cities.length && items.length) {
       const t = editTransaction;
       setFormData({
-        purchaserName:     t.purchaserName?._id  || t.purchaserName  || '',
-        purchaserCity:     t.purchaserCity?._id  || t.purchaserCity  || '',
-        buyerName:         t.buyerName?._id      || t.buyerName      || '',
-        buyerCity:         t.buyerCity?._id      || t.buyerCity      || '',
-        itemName:          t.itemName?._id       || t.itemName       || '',
-        quantity:          t.quantity            || '',
-        unit:              t.unit               || 'bag',
-        ratePerUnit:       t.ratePerUnit         || '',
-        grainTradeType:    t.grainTradeType      || '',
-        dalaliRatePerKatta:t.dalaliRatePerKatta  || '3',
-        dalaliKattaWeight: t.dalaliKattaWeight   || '20kg',
-        tradeConditions:   t.tradeConditions     || '',
-        tradeMethod:       t.tradeMethod         || 'phone',
-        date:              t.date
-                             ? format(new Date(t.date), 'yyyy-MM-dd')
-                             : format(new Date(), 'yyyy-MM-dd')
+        purchaserName:      t.purchaserName?._id  || t.purchaserName  || '',
+        purchaserCity:      t.purchaserCity?._id  || t.purchaserCity  || '',
+        sellerName:         t.sellerName?._id     || t.sellerName     || '',
+        sellerCity:         t.sellerCity?._id     || t.sellerCity     || '',
+        itemName:           t.itemName?._id       || t.itemName       || '',
+        quantity:           t.quantity            || '',
+        unit:               t.unit               || 'bag',
+        ratePerUnit:        t.ratePerUnit         || '',
+        grainTradeType:     t.grainTradeType      || '',
+        dalaliRatePerKatta: t.dalaliRatePerKatta  || '3',
+        dalaliKattaWeight:  t.dalaliKattaWeight   || '20kg',
+        tradeConditions:    t.tradeConditions     || '',
+        paymentConditions:  t.paymentConditions   || '',
+        tradeMethod:        t.tradeMethod         || 'phone',
+        date:               t.date
+                              ? format(new Date(t.date), 'yyyy-MM-dd')
+                              : format(new Date(), 'yyyy-MM-dd')
       });
       setNextTransactionNumber(t.transactionNumber);
     }
@@ -121,9 +125,12 @@ const AddTransaction = () => {
     }
   };
 
+  // Helper to keep onChange calls concise for SearchableSelect
+  const set = (field) => (value) => setFormData(prev => ({ ...prev, [field]: value }));
+
   return (
     <div className="min-h-screen bg-gray-50">
-    
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
         {/* Header */}
@@ -169,64 +176,57 @@ const AddTransaction = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+
             {/* Purchaser Details */}
             <div className="border-b pb-6">
               <h3 className="text-lg font-semibold mb-4">Purchaser Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="label">Purchaser Name</label>
-                  <select
-                    className="input-field"
+                  <SearchableSelect
+                    options={clients}
                     value={formData.purchaserName}
-                    onChange={(e) => setFormData({ ...formData, purchaserName: e.target.value })}
+                    onChange={set('purchaserName')}
+                    placeholder="Search purchaser..."
                     required
-                  >
-                    <option value="">Select Purchaser</option>
-                    {clients.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                  </select>
+                  />
                 </div>
                 <div>
                   <label className="label">Purchaser City</label>
-                  <select
-                    className="input-field"
+                  <SearchableSelect
+                    options={cities}
                     value={formData.purchaserCity}
-                    onChange={(e) => setFormData({ ...formData, purchaserCity: e.target.value })}
+                    onChange={set('purchaserCity')}
+                    placeholder="Search city..."
                     required
-                  >
-                    <option value="">Select City</option>
-                    {cities.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                  </select>
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Buyer Details */}
+            {/* Seller Details */}
             <div className="border-b pb-6">
-              <h3 className="text-lg font-semibold mb-4">Buyer Details</h3>
+              <h3 className="text-lg font-semibold mb-4">Seller Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="label">Buyer Name</label>
-                  <select
-                    className="input-field"
-                    value={formData.buyerName}
-                    onChange={(e) => setFormData({ ...formData, buyerName: e.target.value })}
+                  <label className="label">Seller Name</label>
+                  <SearchableSelect
+                    options={clients}
+                    value={formData.sellerName}
+                    onChange={set('sellerName')}
+                    placeholder="Search seller..."
                     required
-                  >
-                    <option value="">Select Buyer</option>
-                    {clients.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                  </select>
+                  />
                 </div>
                 <div>
-                  <label className="label">Buyer City</label>
-                  <select
-                    className="input-field"
-                    value={formData.buyerCity}
-                    onChange={(e) => setFormData({ ...formData, buyerCity: e.target.value })}
+                  <label className="label">Seller City</label>
+                  <SearchableSelect
+                    options={cities}
+                    value={formData.sellerCity}
+                    onChange={set('sellerCity')}
+                    placeholder="Search city..."
                     required
-                  >
-                    <option value="">Select City</option>
-                    {cities.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                  </select>
+                  />
                 </div>
               </div>
             </div>
@@ -278,7 +278,6 @@ const AddTransaction = () => {
                     required min="0" step="1"
                   />
                 </div>
-                
               </div>
             </div>
 
@@ -286,7 +285,7 @@ const AddTransaction = () => {
             <div className="border-b pb-6">
               <h3 className="text-lg font-semibold mb-4">Dalali Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                               <div>
+                <div>
                   <label className="label">Dalali Rate per Katta</label>
                   <input
                     type="number" className="input-field"
@@ -296,7 +295,6 @@ const AddTransaction = () => {
                     required min="0" step="1"
                   />
                 </div>
-
                 <div>
                   <label className="label">Katta Weight</label>
                   <select
@@ -305,6 +303,7 @@ const AddTransaction = () => {
                     onChange={(e) => setFormData({ ...formData, dalaliKattaWeight: e.target.value })}
                   >
                     <option value="20kg">20 kg</option>
+                    <option value="20kg">30 kg</option>
                     <option value="50kg">50 kg</option>
                     <option value="70kg">70 kg</option>
                     <option value="100kg">100 kg</option>
@@ -321,7 +320,9 @@ const AddTransaction = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Trade Details</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
+
+                {/* Trade Conditions & Payment Conditions side by side */}
+                <div>
                   <label className="label">Trade Conditions</label>
                   <textarea
                     className="input-field" rows="3"
@@ -330,6 +331,16 @@ const AddTransaction = () => {
                     onChange={(e) => setFormData({ ...formData, tradeConditions: e.target.value })}
                   />
                 </div>
+                <div>
+                  <label className="label">Payment Conditions</label>
+                  <textarea
+                    className="input-field" rows="3"
+                    placeholder="Enter payment conditions"
+                    value={formData.paymentConditions}
+                    onChange={(e) => setFormData({ ...formData, paymentConditions: e.target.value })}
+                  />
+                </div>
+
                 <div>
                   <label className="label">Trade Method</label>
                   <div className="flex gap-4 mt-2">

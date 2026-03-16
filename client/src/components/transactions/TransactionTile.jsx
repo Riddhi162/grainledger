@@ -27,7 +27,7 @@ const TransactionTile = ({ txn, onEdit, onDelete }) => {
       html2pdf()
         .set({
           margin: 0,
-          filename: `Contract note-${txn.purchaserName?.name}-${txn.buyerName?.name}.pdf`,
+        filename: `Contract No. - ${txn.transactionNumber?.split('-').pop()}-${txn.purchaserName?.name}-${txn.sellerName?.name}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -75,7 +75,7 @@ const TransactionTile = ({ txn, onEdit, onDelete }) => {
         </div>
         <div className="hidden sm:block flex-1 min-w-0">
           <p className="text-xs text-gray-400">Seller</p>
-          <p className="text-sm font-medium text-gray-700 truncate">{txn.buyerName?.name}</p>
+          <p className="text-sm font-medium text-gray-700 truncate">{txn.sellerName?.name}</p>
         </div>
         <div className="hidden md:block flex-1 min-w-0">
           <p className="text-xs text-gray-400">Item</p>

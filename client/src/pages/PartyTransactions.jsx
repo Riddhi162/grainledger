@@ -82,7 +82,7 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px', tableLayout: 'fixed' }}>
         <colgroup>
           <col style={{ width: '9%' }} />   {/* DATE */}
-          <col style={{ width: '14%' }} />  {/* BUYER/SELLER */}
+          <col style={{ width: '14%' }} />  {/* seller/SELLER */}
           <col style={{ width: '9%' }} />   {/* PLACE */}
           <col style={{ width: '14%' }} />  {/* NAME OF GOODS */}
           <col style={{ width: '7%' }} />   {/* BUY/SELL */}
@@ -94,7 +94,7 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
         <thead>
           <tr style={{ background: '#f0f0f0' }}>
             <th style={th}>DATE</th>
-            <th style={th}>BUYER / SELLER</th>
+            <th style={th}>seller / SELLER</th>
             <th style={th}>PLACE</th>
             <th style={th}>NAME OF GOODS</th>
             <th style={th}>BUY / SELL</th>
@@ -106,10 +106,10 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
         </thead>
         <tbody>
           {transactions.map((txn, i) => {
-            const isBuyer = txn.buyerName?.name?.toLowerCase() === clientName?.toLowerCase();
-            const otherParty = isBuyer ? txn.purchaserName?.name : txn.buyerName?.name;
-            const otherCity  = isBuyer ? txn.purchaserCity?.name : txn.buyerCity?.name;
-            const buySell    = isBuyer ? 'BUY' : 'SELL';
+            const isseller = txn.sellerName?.name?.toLowerCase() === clientName?.toLowerCase();
+            const otherParty = isseller ? txn.purchaserName?.name : txn.sellerName?.name;
+            const otherCity  = isseller ? txn.purchaserCity?.name : txn.sellerCity?.name;
+            const buySell    = isseller ? 'BUY' : 'SELL';
 
             return (
               <tr key={txn._id} style={{ background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
@@ -117,7 +117,7 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
                 <td style={td}>{otherParty}</td>
                 <td style={td}>{otherCity}</td>
                 <td style={td}>{txn.itemName?.name}</td>
-                <td style={{ ...td, textAlign: 'center', fontWeight: '600', color: isBuyer ? '#1a56db' : '#15803d' }}>
+                <td style={{ ...td, textAlign: 'center', fontWeight: '600', color: isseller ? '#1a56db' : '#15803d' }}>
                   {buySell}
                 </td>
                 <td style={{ ...td, textAlign: 'right' }}>
@@ -254,17 +254,17 @@ const PartyTransactions = () => {
     doc.autoTable({
       startY: 70,
       head: [[
-        'DATE', 'BUYER/SELLER', 'PLACE', 'NAME OF GOODS',
+        'DATE', 'seller/SELLER', 'PLACE', 'NAME OF GOODS',
         'BUY/SELL', 'RATE', 'BAGS/KATTA', 'BROKER RATE', 'AMOUNT'
       ]],
       body: transactions.map(txn => {
-        const isBuyer = txn.buyerName?.name?.toLowerCase() === clientName.toLowerCase();
+        const isseller = txn.sellerName?.name?.toLowerCase() === clientName.toLowerCase();
         return [
           format(new Date(txn.date), 'dd/MM/yyyy'),
-          isBuyer ? txn.purchaserName?.name : txn.buyerName?.name,
-          isBuyer ? txn.purchaserCity?.name : txn.buyerCity?.name,
+          isseller ? txn.purchaserName?.name : txn.sellerName?.name,
+          isseller ? txn.purchaserCity?.name : txn.sellerCity?.name,
           txn.itemName?.name,
-          isBuyer ? 'BUY' : 'SELL',
+          isseller ? 'BUY' : 'SELL',
           `₹${Number(txn.ratePerUnit).toFixed(2)}`,
           `${txn.quantity} ${txn.unit}`,
           `₹${txn.dalaliRatePerKatta}/${txn.dalaliKattaWeight}`,

@@ -25,15 +25,15 @@ const transactionSchema = new mongoose.Schema({
     ref: 'City',
     required: [true, 'Purchaser city is required']
   },
-  buyerName: {
+  sellerName: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
-    required: [true, 'Buyer name is required']
+    required: [true, 'Seller name is required']
   },
-  buyerCity: {
+  sellerCity: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'City',
-    required: [true, 'Buyer city is required']
+    required: [true, 'Seller city is required']
   },
   itemName: {
     type: mongoose.Schema.Types.ObjectId,
@@ -66,7 +66,7 @@ const transactionSchema = new mongoose.Schema({
   },
   dalaliKattaWeight: {
     type: String,
-    enum: ['20kg', '50kg','70kg','100kg'],
+    enum: ['20kg','30kg', '50kg','70kg', '100kg'],
     required: [true, 'Dalali katta weight is required']
   },
   totalAmount: {
@@ -76,6 +76,11 @@ const transactionSchema = new mongoose.Schema({
     // Calculated as: dalaliRatePerKatta * quantity
   },
   tradeConditions: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  paymentConditions: {
     type: String,
     trim: true,
     default: ''
@@ -98,7 +103,7 @@ const transactionSchema = new mongoose.Schema({
 transactionSchema.index({ year: 1, sequenceNumber: 1 });
 transactionSchema.index({ date: 1 });
 transactionSchema.index({ purchaserName: 1 });
-transactionSchema.index({ buyerName: 1 });
+transactionSchema.index({ sellerName: 1 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 

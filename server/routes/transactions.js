@@ -51,19 +51,19 @@ router.get('/', async (req, res) => {
       if (endDate) query.date.$lte = new Date(endDate);
     }
     
-    // Client filter (purchaser or buyer)
+    // Client filter (purchaser or seller)
     if (client) {
       query.$or = [
         { purchaserName: client },
-        { buyerName: client }
+        { sellerName: client }
       ];
     }
     
     const transactions = await Transaction.find(query)
       .populate('purchaserName')
       .populate('purchaserCity')
-      .populate('buyerName')
-      .populate('buyerCity')
+      .populate('sellerName')
+      .populate('sellerCity')
       .populate('itemName')
       .sort({ date: -1 })
       .limit(parseInt(limit));
@@ -92,8 +92,8 @@ router.get('/daily/:date', async (req, res) => {
     })
       .populate('purchaserName')
       .populate('purchaserCity')
-      .populate('buyerName')
-      .populate('buyerCity')
+      .populate('sellerName')
+      .populate('sellerCity')
       .populate('itemName')
       .sort({ createdAt: 1 });
     
@@ -115,7 +115,7 @@ router.get('/party/:clientId', async (req, res) => {
     let query = {
       $or: [
         { purchaserName: clientId },
-        { buyerName: clientId }
+        { sellerName: clientId }
       ]
     };
     
@@ -129,8 +129,8 @@ router.get('/party/:clientId', async (req, res) => {
     const transactions = await Transaction.find(query)
       .populate('purchaserName')
       .populate('purchaserCity')
-      .populate('buyerName')
-      .populate('buyerCity')
+      .populate('sellerName')
+      .populate('sellerCity')
       .populate('itemName')
       .sort({ date: 1 });
     
@@ -149,8 +149,8 @@ router.get('/:id', async (req, res) => {
     const transaction = await Transaction.findById(req.params.id)
       .populate('purchaserName')
       .populate('purchaserCity')
-      .populate('buyerName')
-      .populate('buyerCity')
+      .populate('sellerName')
+      .populate('sellerCity')
       .populate('itemName');
     
     if (!transaction) {
@@ -190,8 +190,8 @@ router.post('/', async (req, res) => {
     const populatedTransaction = await Transaction.findById(transaction._id)
       .populate('purchaserName')
       .populate('purchaserCity')
-      .populate('buyerName')
-      .populate('buyerCity')
+      .populate('sellerName')
+      .populate('sellerCity')
       .populate('itemName');
     
     res.status(201).json({ success: true, data: populatedTransaction });
@@ -219,8 +219,8 @@ router.put('/:id', async (req, res) => {
     )
       .populate('purchaserName')
       .populate('purchaserCity')
-      .populate('buyerName')
-      .populate('buyerCity')
+      .populate('sellerName')
+      .populate('sellerCity')
       .populate('itemName');
     
     if (!transaction) {

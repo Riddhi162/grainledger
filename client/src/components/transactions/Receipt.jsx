@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import signatureImg from '../../assets/signature.png';
 
-
 const SignatureBlock = () => (
   <img
     src={signatureImg}
@@ -68,11 +67,11 @@ const Receipt = ({ txn }) => (
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', flex: 1 }}>
           <span style={{ minWidth: '90px' }}><strong>Seller</strong></span>
-          <span><strong>:</strong>&nbsp; {txn.buyerName?.name}</span>
+          <span><strong>:</strong>&nbsp; {txn.sellerName?.name}</span>
         </div>
         <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
           <span style={{ minWidth: '130px', textAlign: 'right' }}><strong>Seller City</strong></span>
-          <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.buyerCity?.name}</span>
+          <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.sellerCity?.name}</span>
         </div>
       </div>
     </div>
@@ -90,7 +89,8 @@ const Receipt = ({ txn }) => (
         <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.dalaliKattaWeight}</span>
       </div>
     </div>
-    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+
+     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
       <div style={{ display: 'flex', flex: 1 }}>
         <span style={{ minWidth: '130px' }}><strong>Bags / Katta</strong></span>
         <span><strong>:</strong>&nbsp; {txn.quantity} {txn.unit}</span>
@@ -100,17 +100,29 @@ const Receipt = ({ txn }) => (
         <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {Number(txn.ratePerUnit).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
       </div>
     </div>
-    <div style={{ marginBottom: '10px', display: 'flex' }}>
+     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+     <div style={{ marginBottom: '10px', display: 'flex' }}>
       <span style={{ minWidth: '130px' }}><strong>Trade Method</strong></span>
       <span><strong>:</strong>&nbsp; <span style={{ textTransform: 'capitalize' }}>{txn.tradeMethod}</span></span>
     </div>
-
-    {txn.tradeConditions && (
-      <div style={{ marginBottom: '10px', display: 'flex' }}>
-        <span style={{ minWidth: '130px' }}><strong>Condition</strong></span>
-        <span><strong>:</strong>&nbsp; {txn.tradeConditions}</span>
+     <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+        <span style={{ minWidth: '160px', textAlign: 'right' }}><strong>Payment Condition</strong></span>
+        <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {txn.paymentConditions || '—'}</span>
       </div>
-    )}
+
+      
+    </div>
+    {/* ── Condition & Payment Conditions (below Weight, side by side) ── */}
+   
+      <div style={{ display: 'flex', flex: 1 }}>
+        <span style={{ minWidth: '130px' }}><strong>Condition</strong></span>
+        <span><strong>:</strong>&nbsp; {txn.tradeConditions || '—'}</span>
+      </div>
+     
+
+   
+
+   
 
     <hr style={{ borderStyle: 'dashed', borderColor: '#999', margin: '18px 0' }} />
 
@@ -124,7 +136,6 @@ const Receipt = ({ txn }) => (
 
     {/* ── Signature ── */}
     <div style={{ textAlign: 'right', fontSize: '14px', fontWeight: '600', color: '#c00' }}>
-     
       <div style={{ display: 'inline-block', textAlign: 'center' }}>
         <SignatureBlock />
         <div style={{ borderTop: '1px solid #999', paddingTop: '6px', fontSize: '12px', color: '#888' }}>
