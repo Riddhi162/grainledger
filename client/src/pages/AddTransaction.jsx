@@ -275,7 +275,7 @@ const AddTransaction = () => {
                     placeholder="Enter rate"
                     value={formData.ratePerUnit}
                     onChange={(e) => setFormData({ ...formData, ratePerUnit: e.target.value })}
-                    required min="0" step="1"
+                     min="0" step="1"
                   />
                 </div>
               </div>
