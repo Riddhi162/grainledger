@@ -55,7 +55,7 @@ const DailyTransactions = () => {
 
   // Grand total across ALL transactions (not just current page)
   const grandTotal = useMemo(
-    () => allTransactions.reduce((sum, t) => sum + t.totalAmount, 0),
+    () => allTransactions.reduce((sum, t) => sum + t.totalAmount, 0) * 2,
     [allTransactions]
   );
 
