@@ -66,7 +66,7 @@ router.get('/', async (req, res) => {
       .populate('sellerCity')
       .populate('itemName')
       .sort({ date: -1 })
-      .limit(parseInt(limit));
+      
     
     res.json({ success: true, data: transactions });
   } catch (error) {
