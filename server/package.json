@@ -9,7 +9,8 @@
     "type": "module",
     "scripts": {
         "dev": "node --watch server.js",
-        "start": "node server.js"
+        "start": "node server.js",
+        "backup": "node backup.js"
     },
     "keywords": [],
     "author": "",

@@ -1,0 +1,28 @@
+name: Daily MongoDB Backup
+
+on:
+  schedule:
+    - cron: '30 17 * * *'  # 11 PM IST (5:30 PM UTC)
+  workflow_dispatch:        # allows manual trigger too
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: cd server && npm install
+
+      - name: Run backup
+        run: cd server && node backup.js
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GITHUB_TOKEN: ${{ secrets.BACKUP_GITHUB_TOKEN }}
+          GITHUB_OWNER: Riddhi162
+          GITHUB_REPO: grainledger-backup

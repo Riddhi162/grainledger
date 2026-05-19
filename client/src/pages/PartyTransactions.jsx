@@ -37,20 +37,20 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
       {/* ── Company Header ── */}
       <div style={{ textAlign: 'center', marginBottom: '10px' }}>
         <div style={{ fontSize: '18px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-          YOUR COMPANY NAME
+          GIRIRAJ HASMUKHLAL THAKKAR
         </div>
         <div style={{ fontSize: '12px', fontWeight: '600' }}>GRAIN BROKER</div>
-        <div style={{ fontSize: '11px' }}>Your Address, Market Yard,</div>
+        <div style={{ fontSize: '11px' }}>A/37. HATHIKHANA, MARKET YARD,</div>
         <div style={{ fontSize: '11px' }}>VADODARA - 390 006.</div>
-        <div style={{ fontSize: '11px' }}>PH.NO. OFF : XXXXXXX, XXXXXXX, XXXXXXX</div>
-        <div style={{ fontSize: '11px' }}>MOBILE NO. : XXXXXXXXXX, XXXXXXXXXX</div>
+        <div style={{ fontSize: '11px' }}>PH.NO. OFF : 2422141, 2422064, 2421231</div>
+        <div style={{ fontSize: '11px' }}>MOBILE NO. : 9879035642,  9979878246</div>
       </div>
 
       <hr style={{ borderTop: '1.5px solid #000', margin: '6px 0' }} />
 
       {/* ── PAN + Party Info ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '11px' }}>
-        <span><strong>PAN NO :</strong> XXXXXXXXXX</span>
+        <span><strong>PAN NO :</strong> ABRPT 9305-R</span>
         <span><strong>BILL NO : {billNo || transactions[0]?.transactionNumber || '-'}</strong></span>
       </div>
 
@@ -71,9 +71,9 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
 
       {/* ── Bank Details placeholder ── */}
       <div style={{ fontSize: '11px', marginBottom: '8px' }}>
-        <strong>Bank :</strong> YOUR BANK NAME &nbsp;&nbsp;
-        <strong>A/C NO :</strong> XXXXXXXXXXXXXXXX &nbsp;&nbsp;
-        <strong>IFSC :</strong> XXXXXXXXXX
+        <strong>Bank :</strong>SBI (Main Br. Vadodara) &nbsp;&nbsp;
+        <strong>A/C NO :</strong> 56002008707 &nbsp;&nbsp;
+        <strong>IFSC :</strong> SBIN0000324
       </div>
 
       <hr style={{ borderTop: '1px solid #000', margin: '4px 0 0 0' }} />
@@ -82,7 +82,7 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px', tableLayout: 'fixed' }}>
         <colgroup>
           <col style={{ width: '9%' }} />   {/* DATE */}
-          <col style={{ width: '14%' }} />  {/* seller/SELLER */}
+          <col style={{ width: '14%' }} />  {/* BUYER/SELLER */}
           <col style={{ width: '9%' }} />   {/* PLACE */}
           <col style={{ width: '14%' }} />  {/* NAME OF GOODS */}
           <col style={{ width: '7%' }} />   {/* BUY/SELL */}
@@ -94,7 +94,7 @@ const PartyReport = ({ transactions, clientName, clientCity, startDate, endDate,
         <thead>
           <tr style={{ background: '#f0f0f0' }}>
             <th style={th}>DATE</th>
-            <th style={th}>seller / SELLER</th>
+            <th style={th}>BUYER / SELLER</th>
             <th style={th}>PLACE</th>
             <th style={th}>NAME OF GOODS</th>
             <th style={th}>BUY / SELL</th>
@@ -234,7 +234,7 @@ const PartyTransactions = () => {
     doc.setFontSize(11); doc.setFont('helvetica', 'normal');
     doc.text('GRAIN BROKER', 148, 20, { align: 'center' });
     doc.text('Your Address, Market Yard, VADODARA - 390 006.', 148, 26, { align: 'center' });
-    doc.text('PH.NO. OFF : XXXXXXX  |  MOBILE : XXXXXXXXXX', 148, 32, { align: 'center' });
+    doc.text('PH.NO. OFF : 2422141, 2422064, 2421231  |  MOBILE : 98790 35642,  99798 78246', 148, 32, { align: 'center' });
 
     doc.setDrawColor(0); doc.setLineWidth(0.5);
     doc.line(10, 35, 287, 35);

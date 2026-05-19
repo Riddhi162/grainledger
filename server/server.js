@@ -20,9 +20,19 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware
+const allowedOrigins = [
+  'https://grainledger-g1fq.onrender.com',
+  'http://localhost:5173',
+]; 
+
 app.use(cors({
-  origin: 'https://grainledger-g1fq.onrender.com',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
