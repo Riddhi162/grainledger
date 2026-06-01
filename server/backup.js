@@ -6,8 +6,8 @@ import Transaction from './models/Transaction.js';
 import Client from './models/Client.js';
 import City from './models/City.js';
 import Item from './models/Item.js';
-
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+import User from './models/User.js';
+const GITHUB_TOKEN = process.env.BACKUP_GITHUB_TOKEN;
 const GITHUB_OWNER = process.env.GITHUB_OWNER; // Riddhi162
 const GITHUB_REPO  = process.env.GITHUB_REPO;  // grainledger-backup
 
@@ -67,20 +67,22 @@ async function runBackup() {
   console.log('✓ MongoDB connected');
 
   // Fetch all collections
-  const [transactions, clients, cities, items] = await Promise.all([
+  const [transactions, clients, cities, items, users] = await Promise.all([
     Transaction.find({}).lean(),
     Client.find({}).lean(),
     City.find({}).lean(),
     Item.find({}).lean(),
+    User.find({}).lean(),
   ]);
 
-  console.log(`📦 Fetched: ${transactions.length} transactions, ${clients.length} clients, ${cities.length} cities, ${items.length} items`);
+  console.log(`📦 Fetched: ${transactions.length} transactions, ${clients.length} clients, ${cities.length} cities, ${items.length} items, ${users.length} users`);
 
   // Push each collection to GitHub
   await pushToGitHub('transactions.json', transactions);
   await pushToGitHub('clients.json', clients);
   await pushToGitHub('cities.json', cities);
   await pushToGitHub('items.json', items);
+  await pushToGitHub('users.json', users);
 
   console.log('✅ Backup complete!');
   await mongoose.disconnect();

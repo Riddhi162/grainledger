@@ -23,6 +23,6 @@ jobs:
         run: cd server && node backup.js
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          GITHUB_TOKEN: ${{ secrets.BACKUP_GITHUB_TOKEN }}
+          BACKUP_GITHUB_TOKEN: ${{ secrets.BACKUP_GITHUB_TOKEN }}
           GITHUB_OWNER: Riddhi162
           GITHUB_REPO: grainledger-backup
