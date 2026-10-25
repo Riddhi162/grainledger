@@ -54,6 +54,11 @@ const transactionSchema = new mongoose.Schema({
     type: Number,
     min: 0
   },
+  rateUnitWeight: {
+    type: String,
+    default: ''
+    // e.g. '10kg', '20kg', '1 quintal' - group/basis of rate
+  },
   grainTradeType: {
     type: String,
     trim: true

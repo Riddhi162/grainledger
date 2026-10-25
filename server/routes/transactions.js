@@ -1,5 +1,6 @@
 import express from 'express';
 import Transaction from '../models/Transaction.js';
+import Client from '../models/Client.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -65,9 +66,8 @@ router.get('/', async (req, res) => {
       .populate('sellerName')
       .populate('sellerCity')
       .populate('itemName')
-      .sort({ date: -1 })
+      .sort({ date: -1 });
       
-    
     res.json({ success: true, data: transactions });
   } catch (error) {
     console.error(error);
@@ -111,6 +111,14 @@ router.get('/party/:clientId', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
     const clientId = req.params.clientId;
+
+    // Check if client is a farmer
+    const client = await Client.findById(clientId);
+    if (client && client.isFarmer) {
+      return res.status(400).json({
+        message: 'This client is registered as a Farmer/Khedut. Party reports are not generated for farmers.'
+      });
+    }
     
     let query = {
       $or: [

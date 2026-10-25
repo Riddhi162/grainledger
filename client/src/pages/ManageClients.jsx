@@ -123,7 +123,7 @@ const CityCombobox = ({ cities, value, onChange, onCityCreated }) => {
 const ManageClients = () => {
   const [clients, setClients] = useState([]);
   const [cities, setCities] = useState([]);
-  const [formData, setFormData] = useState({ name: '', city: '' });
+  const [formData, setFormData] = useState({ name: '', city: '', isFarmer: false });
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -167,7 +167,7 @@ const ManageClients = () => {
       } else {
         await api.post('/clients', formData);
       }
-      setFormData({ name: '', city: '' });
+      setFormData({ name: '', city: '', isFarmer: false });
       fetchClients();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to save client');
@@ -176,7 +176,7 @@ const ManageClients = () => {
 
   const handleEdit = (client) => {
     setEditingId(client._id);
-    setFormData({ name: client.name, city: client.city._id });
+    setFormData({ name: client.name, city: client.city?._id || client.city, isFarmer: !!client.isFarmer });
   };
 
   const handleDelete = async (id) => {
@@ -218,28 +218,55 @@ const ManageClients = () => {
 
         <div className="card mb-8">
           <h2 className="text-xl font-semibold mb-4">{editingId ? 'Edit Client' : 'Add New Client'}</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              className="input-field"
-              placeholder="Client name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-            <CityCombobox
-              cities={cities}
-              value={formData.city}
-              onChange={(cityId) => setFormData({ ...formData, city: cityId })}
-              onCityCreated={handleCityCreated}
-            />
-            <button type="submit" className="btn-primary">
-              {editingId ? 'Update' : 'Add'} Client
-            </button>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                className="input-field"
+                placeholder="Client name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+              <CityCombobox
+                cities={cities}
+                value={formData.city}
+                onChange={(cityId) => setFormData({ ...formData, city: cityId })}
+                onCityCreated={handleCityCreated}
+              />
+              <button type="submit" className="btn-primary">
+                {editingId ? 'Update' : 'Add'} Client
+              </button>
+            </div>
+
+            {/* Client Category / Farmer Radio Selection */}
+            <div className="flex items-center gap-6 pt-2">
+              <span className="text-sm font-medium text-gray-700">Client Type:</span>
+              <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-800">
+                <input
+                  type="radio"
+                  name="clientType"
+                  checked={!formData.isFarmer}
+                  onChange={() => setFormData({ ...formData, isFarmer: false })}
+                  className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                />
+                <span>Regular Party (Trader/Merchant)</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-800">
+                <input
+                  type="radio"
+                  name="clientType"
+                  checked={formData.isFarmer}
+                  onChange={() => setFormData({ ...formData, isFarmer: true })}
+                  className="w-4 h-4 text-green-600 focus:ring-green-500 border-gray-300"
+                />
+                <span className="font-semibold text-green-700">Farmer / Khedut</span>
+              </label>
+            </div>
           </form>
           {editingId && (
             <button
-              onClick={() => { setEditingId(null); setFormData({ name: '', city: '' }); }}
+              onClick={() => { setEditingId(null); setFormData({ name: '', city: '', isFarmer: false }); }}
               className="btn-secondary mt-4"
             >
               Cancel Edit
@@ -247,7 +274,7 @@ const ManageClients = () => {
           )}
         </div>
 
-        {/* Clients table — unchanged */}
+        {/* Clients table */}
         <div className="card">
           <h2 className="text-xl font-semibold mb-4">Clients List</h2>
           <div className="overflow-x-auto">
@@ -256,19 +283,31 @@ const ManageClients = () => {
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {clients.length === 0 ? (
                   <tr>
-                    <td colSpan="3" className="px-6 py-4 text-center text-gray-500">No clients found</td>
+                    <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No clients found</td>
                   </tr>
                 ) : (
                   clients.map((client) => (
                     <tr key={client._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{client.name}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{client.city?.name || '-'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {client.isFarmer ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Farmer / Khedut
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            Regular Party
+                          </span>
+                        )}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button onClick={() => handleEdit(client)} className="text-primary-600 hover:text-primary-700 mr-4">Edit</button>
                         <button onClick={() => handleDelete(client._id)} className="text-red-600 hover:text-red-700">Delete</button>

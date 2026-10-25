@@ -30,6 +30,7 @@ const AddTransaction = () => {
     quantity: '',
     unit: 'bag',
     ratePerUnit: '',
+    rateUnitWeight: '',
     grainTradeType: '',
     dalaliRatePerKatta: '3',
     dalaliKattaWeight: '20kg',
@@ -59,6 +60,7 @@ const AddTransaction = () => {
         quantity:           t.quantity            || '',
         unit:               t.unit               || 'bag',
         ratePerUnit:        t.ratePerUnit         || '',
+        rateUnitWeight:     t.rateUnitWeight      || '',
         grainTradeType:     t.grainTradeType      || '',
         dalaliRatePerKatta: t.dalaliRatePerKatta  || '3',
         dalaliKattaWeight:  t.dalaliKattaWeight   || '20kg',
@@ -138,43 +140,32 @@ const AddTransaction = () => {
           {isEditMode && (
             <button
               onClick={() => navigate('/daily-transactions')}
-              className="text-gray-500 hover:text-gray-700 transition"
+              className="p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 transition"
+              title="Back to daily transactions"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
               </svg>
             </button>
           )}
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              {isEditMode ? 'Edit Transaction' : 'Add New Transaction'}
+              {isEditMode ? `Edit Transaction` : 'Add New Transaction'}
             </h1>
-            {isEditMode && (
-              <p className="text-sm text-gray-500 mt-1">
-                Editing transaction <span className="font-semibold text-primary-600">{editTransaction.transactionNumber}</span>
-              </p>
-            )}
+            <p className="text-sm text-gray-500 mt-1">
+              Transaction No: <span className="font-semibold text-blue-600">{nextTransactionNumber}</span>
+              {isEditMode && <span className="ml-2 text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">Editing</span>}
+            </p>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
         <div className="card">
-          {/* Transaction number badge */}
-          <div className={`mb-6 p-4 rounded-lg ${isEditMode ? 'bg-amber-50 border border-amber-200' : 'bg-primary-50'}`}>
-            <p className="text-sm text-gray-600">Transaction Number</p>
-            <p className={`text-2xl font-bold ${isEditMode ? 'text-amber-600' : 'text-primary-600'}`}>
-              {nextTransactionNumber}
-            </p>
-            {isEditMode && (
-              <p className="text-xs text-amber-600 mt-1">⚠ You are editing an existing transaction</p>
-            )}
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-6">
 
             {/* Purchaser Details */}
@@ -275,7 +266,16 @@ const AddTransaction = () => {
                     placeholder="Enter rate"
                     value={formData.ratePerUnit}
                     onChange={(e) => setFormData({ ...formData, ratePerUnit: e.target.value })}
-                     min="0" step="1"
+                     min="0" step="any"
+                  />
+                </div>
+                <div>
+                  <label className="label">Rate Basis / Group (e.g. 10kg, 20kg, quintal)</label>
+                  <input
+                    type="text" className="input-field"
+                    placeholder="e.g. 10kg or 20kg or 1 quintal"
+                    value={formData.rateUnitWeight}
+                    onChange={(e) => setFormData({ ...formData, rateUnitWeight: e.target.value })}
                   />
                 </div>
               </div>

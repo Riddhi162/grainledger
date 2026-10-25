@@ -54,8 +54,23 @@ const DailyTransactions = () => {
   };
 
   // Grand total across ALL transactions (not just current page)
+  // Each non-farmer party contributes 1x totalAmount.
+  // If neither is farmer: 2 * totalAmount
+  // If either is farmer: 1 * totalAmount
+  // If both are farmers: 0 (or neither billed)
   const grandTotal = useMemo(
-    () => allTransactions.reduce((sum, t) => sum + t.totalAmount, 0) * 2,
+    () => allTransactions.reduce((sum, t) => {
+      const purchaserIsFarmer = !!t.purchaserName?.isFarmer;
+      const sellerIsFarmer = !!t.sellerName?.isFarmer;
+
+      let multiplier = 2;
+      if (purchaserIsFarmer && sellerIsFarmer) {
+        multiplier = 0;
+      } else if (purchaserIsFarmer || sellerIsFarmer) {
+        multiplier = 1;
+      }
+      return sum + (t.totalAmount || 0) * multiplier;
+    }, 0),
     [allTransactions]
   );
 

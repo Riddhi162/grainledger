@@ -10,6 +10,10 @@ const clientSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'City',
     required: [true, 'City is required']
+  },
+  isFarmer: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true

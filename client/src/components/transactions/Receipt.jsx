@@ -97,7 +97,7 @@ const Receipt = ({ txn }) => (
       </div>
       <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
         <span style={{ minWidth: '100px', textAlign: 'right' }}><strong>Rate</strong></span>
-        <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {Number(txn.ratePerUnit).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+        <span style={{ minWidth: '100px' }}><strong>&nbsp;:</strong>&nbsp; {Number(txn.ratePerUnit).toLocaleString('en-IN', { minimumFractionDigits: 2 })}{txn.rateUnitWeight ? ` / ${txn.rateUnitWeight}` : ''}</span>
       </div>
     </div>
      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>

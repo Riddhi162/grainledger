@@ -81,8 +81,15 @@ const TransactionTile = ({ txn, onEdit, onDelete }) => {
           <p className="text-xs text-gray-400">Item</p>
           <p className="text-sm font-medium text-gray-700 truncate">{txn.itemName?.name}</p>
         </div>
+        <div className="hidden lg:block flex-shrink-0 text-right min-w-[110px]">
+          <p className="text-xs text-gray-400">Rate</p>
+          <p className="text-sm font-medium text-gray-800">
+            {txn.ratePerUnit ? `₹${Number(txn.ratePerUnit).toLocaleString('en-IN')}` : '-'}
+            {txn.rateUnitWeight ? <span className="text-xs text-gray-500 font-normal"> / {txn.rateUnitWeight}</span> : ''}
+          </p>
+        </div>
         <div className="flex-shrink-0 text-right">
-          <p className="text-xs text-gray-400">Total</p>
+          <p className="text-xs text-gray-400">Total Dalali</p>
           <p className="text-sm font-bold text-green-600">
             ₹{Number(txn.totalAmount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
           </p>
